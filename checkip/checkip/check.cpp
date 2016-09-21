@@ -5,7 +5,6 @@
 bool checkIp(std::string ip)
 {
 	std::regex ipRegex("^(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[0-9]{2}|[0-9])(\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[0-9]{2}|[0-9])){3}$");
-	//std::regex ipRegex("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$");
 	return std::regex_match(ip, ipRegex) ? true : false;
 }
 
@@ -18,13 +17,11 @@ bool checkMask(int * mask)
 		maskBit = maskBit + mask[i];
 	}
 	maskBit = ~maskBit;
-	//cout << maskBit << "******";
 	int checkNumber;
 	bool point(true);
 	while (point) {
 		checkNumber = 1;
 		checkNumber = checkNumber & maskBit;
-		//cout << checkNumber << ".....";
 		if (checkNumber == 1) {
 			maskBit >>= 1;
 		}
@@ -33,12 +30,7 @@ bool checkMask(int * mask)
 			break;
 		}
 	}
-	//cout << maskBit << "!!!!!";
-
 	return maskBit == 0 ? true : false;
-
-	//std::regex maskRegex("/^(([12]?[0-9]{1,2}|2[0-4][0-9]|25[0-5])(\.|\/)){4}([1-2]?[0-9]|3[0-2])$/");
-	//return std::regex_match(mask, maskRegex) ? true : false;
 }
 
 int quantityHosts(int * mask)
@@ -55,7 +47,7 @@ int quantityHosts(int * mask)
 		quantity++;
 		t = t >> 1;
 	}
-	return quantity;
+	return pow(2, quantity) - 2;
 }
 
 void convertMaskIP(std::string mask, int * maskInt)
@@ -80,5 +72,27 @@ void convertMaskIP(std::string mask, int * maskInt)
 			}
 		}
 	}
+}
 
+std::string classIp(int * ipAddress)
+{
+	if (ipAddress[0] < 127) {
+		return "A";
+	}
+	if (ipAddress[0] == 127) {
+		return "localhost";
+	}
+	if (ipAddress[0] > 127 && ipAddress[0] < 192) {
+		return "B";
+	}
+	if (ipAddress[0] > 191 && ipAddress[0] < 224) {
+		return "C";
+	}
+	if (ipAddress[0] > 223 && ipAddress[0] < 240) {
+		return "D";
+	}
+	if (ipAddress[0] > 239 && ipAddress[0] < 255) {
+		return "E";
+	}
+	return std::string();
 }
