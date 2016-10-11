@@ -5,7 +5,7 @@
 
 int main()
 {
-	string ip = "168.123.3.9";
+	string ip = "0.0.0.1";
 	string mask = "255.255.255.0";
 	
 	int IntMask[4];
