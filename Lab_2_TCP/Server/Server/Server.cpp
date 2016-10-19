@@ -105,12 +105,12 @@ int main()
 		memset(&clnt, 0, sizeof(clnt));		// обнулить память
 		int lclnt = sizeof(clnt);			// размер SOCKADDR_IN
 
-		if ((cS = accept(sS, (sockaddr*)&clnt, &lclnt)) == SOCKET_ERROR)
+		/*if ((cS = accept(sS, (sockaddr*)&clnt, &lclnt)) == SOCKET_ERROR)
 			throw  SetErrorMsgText("accept:", WSAGetLastError());
 		else {
 			cout << "Ip: " << clnt.sin_family << endl;
 			cout << "Port: " << clnt.sin_port;
-		}
+		}*/
 
 
 		if (closesocket(sS) == SOCKET_ERROR)
