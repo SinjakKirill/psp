@@ -98,7 +98,7 @@ int main()
 		SOCKADDR_IN serv;
 
 		serv.sin_family = AF_INET;
-		serv.sin_port = htons(2000);//порт сокета
+		serv.sin_port = htons(2000);						//порт сокета
 		serv.sin_addr.s_addr = inet_addr("192.168.43.159");
 
 		if (bind(sS, (LPSOCKADDR)&serv, sizeof(serv)) == SOCKET_ERROR)

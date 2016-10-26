@@ -79,6 +79,8 @@ string SetErrorMsgText(string msgText, int code)
 
 int main()
 {
+	setlocale(LC_CTYPE, "Russian");
+
 	string ip = "127.0.0.1";
 
 	WSAData wsaData;
@@ -89,27 +91,41 @@ int main()
 	if ((sC = socket(AF_INET, SOCK_STREAM, NULL)) == INVALID_SOCKET)
 		throw SetErrorMsgText("Socket: ", WSAGetLastError());
 
+	string IP = " 192.168.43.159";
 
 	SOCKADDR_IN serv;
 	serv.sin_family = AF_INET;
 	serv.sin_port = htons(2000);
-	serv.sin_addr.s_addr = inet_pton(AF_INET, "127.0.0.1", &serv.sin_addr);
+	inet_pton(AF_INET, IP.c_str(), &serv.sin_addr);
 	int lobuf = 0;
 
 	if ((connect(sC, (sockaddr*)&serv, sizeof(serv))) == SOCKET_ERROR)
 		throw  SetErrorMsgText("connect:", WSAGetLastError());
-	else {
-		cout << "Подключение установлено." << endl;
+
+	char ibuf[50] = "Hello!!!";
+
+	char ibuf1[50];
+	int k;
+	cout << "Введите количество сообщений: ";
+	cin >> k;
+
+	for (int i = 0; i < k; i++)
+	{
+		if (send(sC, ibuf, strlen(ibuf) + 1, NULL) == SOCKET_ERROR)
+			throw SetErrorMsgText("Send: ", WSAGetLastError());
+
+		if (recv(sC, ibuf1, sizeof(ibuf1), NULL) == SOCKET_ERROR)
+			throw  SetErrorMsgText("Recv: ", WSAGetLastError());
+
+		cout << ibuf1 << endl;
 	}
-
-
-
+	
 	if (closesocket(sC) == SOCKET_ERROR)
 		throw SetErrorMsgText("Closesocket sS: ", WSAGetLastError());
 
 	if (WSACleanup() == SOCKET_ERROR)
 		throw SetErrorMsgText("Cleanup: ", WSAGetLastError());
-
+	_getch();
 	return 0;
 }
 

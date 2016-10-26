@@ -98,21 +98,30 @@ int main()
 		if (bind(sS, (LPSOCKADDR)&serv, sizeof(serv)) == SOCKET_ERROR)
 			throw SetErrorMsgText("bind: ", WSAGetLastError());
 
-		listen(sS, SOMAXCONN);
+		if (listen(sS, 2) == SOCKET_ERROR)
+			throw SetErrorMsgText("listen: ", WSAGetLastError());
 
 		SOCKET cS;							// сокет для обмена данными с клиентом 
 		SOCKADDR_IN clnt;					// параметры  сокета клиента
 		memset(&clnt, 0, sizeof(clnt));		// обнулить память
 		int lclnt = sizeof(clnt);			// размер SOCKADDR_IN
 
-		/*if ((cS = accept(sS, (sockaddr*)&clnt, &lclnt)) == SOCKET_ERROR)
+		char ibuf[50];
+
+
+		if ((cS = accept(sS, (sockaddr*)&clnt, &lclnt)) == SOCKET_ERROR)
 			throw  SetErrorMsgText("accept:", WSAGetLastError());
-		else {
-			cout << "Ip: " << clnt.sin_family << endl;
-			cout << "Port: " << clnt.sin_port;
-		}*/
 
+		while (true)
+		{	
+			if (recv(cS, ibuf, sizeof(ibuf), NULL) == SOCKET_ERROR)
+				throw  SetErrorMsgText("Recv: ", WSAGetLastError());
+			else
+				cout << ibuf << endl;
 
+			if (send(cS, ibuf, strlen(ibuf) + 1, NULL) == SOCKET_ERROR)
+				throw SetErrorMsgText("Send: ", WSAGetLastError());
+		}
 		if (closesocket(sS) == SOCKET_ERROR)
 			throw SetErrorMsgText("Closesocket sS: ", WSAGetLastError());
 
@@ -122,6 +131,7 @@ int main()
 	catch (string errorMsgText) {
 		cout << endl << "WSAGetLastError: " << errorMsgText;
 	}
+	_getch();
 	return 0;
 }
 
