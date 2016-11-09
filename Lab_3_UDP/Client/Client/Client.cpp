@@ -118,7 +118,7 @@ int main()
 		clock_t time;
 		time = clock();
 
-		char str[] = "Hello";
+		char str[] = "Hello!";
 
 		for (int i = 0; i < count; i++)
 		{
